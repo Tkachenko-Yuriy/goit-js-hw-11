@@ -3,16 +3,8 @@
 const BASE_URL = 'https://pixabay.com/api/';
 const API_KEY = '31279729-f68fda383816d4b8eaf8d923a';
 
-export let options = {
-  params: {
-    key: API_KEY,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: 'true',
-    page: 1,
-    per_page: 40,
-  },
-};
+// export let page = 1;
+
 
 // export async function getPhotos(q) {
 //   try {
@@ -23,8 +15,8 @@ export let options = {
 //   }
 // }
 
-export function getPhotos(q) {
-    return fetch(`${BASE_URL}?key=${API_KEY}&q=${q}`, options)
+export function getPhotos(q, page) {
+    return fetch(`${BASE_URL}?key=${API_KEY}&q=${q}&image_type=photo&orientation=horizontal&safesearch=true&page=${page}&per_page=40`)
     .then(response => {
     if (!response.ok) {
       throw new Error(response.status);
@@ -33,3 +25,4 @@ export function getPhotos(q) {
   })
   
 }
+

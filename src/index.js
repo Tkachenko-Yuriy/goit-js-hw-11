@@ -1,5 +1,5 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { getPhotos, options } from './js/fetchAPI';
+import { getPhotos} from './js/fetchAPI';
 import tempGallery from './templates/gallery.hbs';
 // import SimpleLightbox from 'simplelightbox';
 // import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -10,6 +10,8 @@ const refs = {
   loadMoreBtn: document.querySelector('.load-more'),
 };
 
+
+let page = 1;
 let query = '';
 // let gallery = new SimpleLightbox('.gallery a');
 
@@ -20,27 +22,27 @@ refs.loadMoreBtn.addEventListener('click', onMoreClick);
 
 function onSearchForm(evt) {
   evt.preventDefault();
-  options.params.page = 1;
+  page = 1;
   refs.loadMoreBtn.classList.remove('is-hidden');
   const q = evt.currentTarget.searchQuery.value.trim();
 
   refs.gallery.innerHTML = '';
 
-  if (q === '') {
-    loadMore.classList.add('is-hidden');
-    Notify.failure(
-      'The search string cannot be empty. Please specify your search query.'
-    );
-    return;
-  }
+    if (q === '') {
+      loadMore.classList.add('is-hidden');
+      Notify.failure(
+        'The search string cannot be empty. Please specify your search query.'
+      );
+      return;
+    }
 
-  getPhotos(q).then(data => {
+  getPhotos(q,page).then(data => {
     if (data.totalHits === 0) {
         refs.loadMoreBtn.classList.add('is-hidden');
         Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.'
         );
-      } else {
+      }else {
         markupGallery(data.hits);
         // gallery.refresh();
           Notify.success(`Hooray! We found ${data.totalHits} images.`);
@@ -58,8 +60,8 @@ function markupGallery(hits) {
 }
 
 function onMoreClick(e) {
-  options.params.page += 1;
-  getPhotos(query)
+  page += 1;
+  getPhotos(query, page)
     .then( data  => {
       markupGallery(data.hits);
       // gallery.refresh();
