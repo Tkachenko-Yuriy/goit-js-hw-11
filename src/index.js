@@ -71,10 +71,10 @@ function onMoreClick(e) {
       markupGallery(data.hits);
       // simpleLightbox().refresh()
 
-      const totalPages = Math.ceil(data.totalHits / options.params.per_page);
+      const totalPages = Math.ceil(data.totalHits / data.hits.length);
 
-      if (options.params.page > totalPages) {
-           refs.loadMoreBtn.classList.add('is-hidden');
+      if (page >= totalPages) {
+          refs.loadMoreBtn.classList.add('is-hidden');
         Notify.success(
           "We're sorry, but you've reached the end of search results."
         );
