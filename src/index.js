@@ -13,7 +13,12 @@ const refs = {
 
 let page = 1;
 let query = '';
-// let gallery = new SimpleLightbox('.gallery a');
+
+// const simpleLightbox = new SimpleLightbox('.gallery a', {
+//   captionsData: 'alt',
+//   captionDelay: 250,
+//   scrollZoomFactor: false,
+// });
 
 refs.loadMoreBtn.classList.add('is-hidden');
 
@@ -24,11 +29,11 @@ function onSearchForm(evt) {
   evt.preventDefault();
   page = 1;
   refs.loadMoreBtn.classList.remove('is-hidden');
-  const q = evt.currentTarget.searchQuery.value.trim();
+  const request = evt.currentTarget.searchQuery.value.trim();
 
   refs.gallery.innerHTML = '';
 
-    if (q === '') {
+    if (request === '') {
       loadMore.classList.add('is-hidden');
       Notify.failure(
         'The search string cannot be empty. Please specify your search query.'
@@ -36,7 +41,7 @@ function onSearchForm(evt) {
       return;
     }
 
-  getPhotos(q,page).then(data => {
+  getPhotos(request,page).then(data => {
     if (data.totalHits === 0) {
         refs.loadMoreBtn.classList.add('is-hidden');
         Notify.failure(
@@ -44,9 +49,9 @@ function onSearchForm(evt) {
         );
       }else {
         markupGallery(data.hits);
-        // gallery.refresh();
+        // simpleLightbox().refresh()
           Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        query = q;
+        query = request;
       }
     })
     .catch(error => console.log(error))
@@ -64,7 +69,7 @@ function onMoreClick(e) {
   getPhotos(query, page)
     .then( data  => {
       markupGallery(data.hits);
-      // gallery.refresh();
+      // simpleLightbox().refresh()
 
       const totalPages = Math.ceil(data.totalHits / options.params.per_page);
 
