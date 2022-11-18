@@ -1,8 +1,8 @@
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { getPhotos} from './js/fetchAPI';
 import tempGallery from './templates/gallery.hbs';
-// import SimpleLightbox from 'simplelightbox';
-// import 'simplelightbox/dist/simple-lightbox.min.css';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   searchForm: document.querySelector('.search-form'),
@@ -14,11 +14,11 @@ const refs = {
 let page = 1;
 let query = '';
 
-// const simpleLightbox = new SimpleLightbox('.gallery a', {
-//   captionsData: 'alt',
-//   captionDelay: 250,
-//   scrollZoomFactor: false,
-// });
+const simpleLightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  scrollZoomFactor: false,
+});
 
 refs.loadMoreBtn.classList.add('is-hidden');
 
@@ -49,7 +49,7 @@ function onSearchForm(evt) {
         );
       }else {
         markupGallery(data.hits);
-        // simpleLightbox().refresh()
+        simpleLightbox.refresh()
           Notify.success(`Hooray! We found ${data.totalHits} images.`);
         query = request;
       }
@@ -69,7 +69,7 @@ function onMoreClick(e) {
   getPhotos(query, page)
     .then( data  => {
       markupGallery(data.hits);
-      // simpleLightbox().refresh()
+      simpleLightbox.refresh()
 
       const totalPages = Math.ceil(data.totalHits / data.hits.length);
 
